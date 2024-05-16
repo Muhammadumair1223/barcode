@@ -18,12 +18,6 @@
 @import blue_thermal_printer;
 #endif
 
-#if __has_include(<bluetooth_print/BluetoothPrintPlugin.h>)
-#import <bluetooth_print/BluetoothPrintPlugin.h>
-#else
-@import bluetooth_print;
-#endif
-
 #if __has_include(<flutter_pdfview/FLTPDFViewFlutterPlugin.h>)
 #import <flutter_pdfview/FLTPDFViewFlutterPlugin.h>
 #else
@@ -40,6 +34,12 @@
 #import <path_provider_foundation/PathProviderPlugin.h>
 #else
 @import path_provider_foundation;
+#endif
+
+#if __has_include(<pdf_image_renderer/PdfImageRendererPlugin.h>)
+#import <pdf_image_renderer/PdfImageRendererPlugin.h>
+#else
+@import pdf_image_renderer;
 #endif
 
 #if __has_include(<permission_handler_apple/PermissionHandlerPlugin.h>)
@@ -65,10 +65,10 @@
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
   [BarcodeScanPlugin registerWithRegistrar:[registry registrarForPlugin:@"BarcodeScanPlugin"]];
   [BlueThermalPrinterPlugin registerWithRegistrar:[registry registrarForPlugin:@"BlueThermalPrinterPlugin"]];
-  [BluetoothPrintPlugin registerWithRegistrar:[registry registrarForPlugin:@"BluetoothPrintPlugin"]];
   [FLTPDFViewFlutterPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPDFViewFlutterPlugin"]];
   [FLTImagePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImagePickerPlugin"]];
   [PathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"PathProviderPlugin"]];
+  [PdfImageRendererPlugin registerWithRegistrar:[registry registrarForPlugin:@"PdfImageRendererPlugin"]];
   [PermissionHandlerPlugin registerWithRegistrar:[registry registrarForPlugin:@"PermissionHandlerPlugin"]];
   [PrintingPlugin registerWithRegistrar:[registry registrarForPlugin:@"PrintingPlugin"]];
   [SharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"SharedPreferencesPlugin"]];

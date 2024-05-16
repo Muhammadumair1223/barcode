@@ -24,8 +24,13 @@ class _BarCodeGenerateScreenState extends State<BarCodeGenerateScreen> {
   PdfPrinter printer = PdfPrinter();
   @override
   void initState() {
-    PdfPrinter().initBluetooth();
     super.initState();
+
+    initialze();
+  }
+
+  Future<void> initialze() async {
+    await PdfPrinter().initBluetooth();
   }
 
   @override
@@ -102,7 +107,7 @@ class _BarCodeGenerateScreenState extends State<BarCodeGenerateScreen> {
                                 "0${controller.quantityController.text}");
                             String upc = controller.upcController.text;
                             if (quantity > 0 && upc.isNotEmpty) {
-                              controller.generatePDF(
+                              await controller.generatePDF(
                                 quantity,
                                 upc,
                                 product.name,
@@ -118,7 +123,7 @@ class _BarCodeGenerateScreenState extends State<BarCodeGenerateScreen> {
                 Expanded(
                   child: CustomButtonWidget(
                     buttonText: 'Print',
-                    onPressed: controller.printPDF,
+                    onPressed: () => controller.printPDF(context),
                     buttonColor: ColorResources.colorPrint,
                   ),
                 ),

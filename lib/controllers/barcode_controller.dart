@@ -46,6 +46,9 @@ class BarcodeController extends BaseController {
     // final netImage = await networkImage('https://www.nfet.net/nfet.jpg');
     final pw.Image image =
         await _getImageFromAsset('assets/image/barCodeLogo.png');
+
+    final font = await PdfGoogleFonts.nunitoExtraLight();
+
     for (int i = 0; i < quantity; i++) {
       pdf.addPage(
         pw.Page(
@@ -59,7 +62,9 @@ class BarcodeController extends BaseController {
                   pw.Text(
                     name,
                     style: pw.TextStyle(
-                        fontSize: 22, fontWeight: pw.FontWeight.bold),
+                        font: font,
+                        fontSize: 22,
+                        fontWeight: pw.FontWeight.bold),
                   ),
                   pw.SizedBox(height: 25),
                   pw.Row(children: [
@@ -76,6 +81,7 @@ class BarcodeController extends BaseController {
                             data: upc,
                             width: 240,
                             height: 60,
+                            textStyle: pw.TextStyle(font: font),
                           ),
                           pw.SizedBox(height: 10),
                           pw.Container(
@@ -90,7 +96,9 @@ class BarcodeController extends BaseController {
                               "\$ $price",
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 38, fontWeight: pw.FontWeight.bold),
+                                  font: font,
+                                  fontSize: 38,
+                                  fontWeight: pw.FontWeight.bold),
                             )),
                           ),
                         ]),
@@ -107,11 +115,11 @@ class BarcodeController extends BaseController {
     notifyListeners();
   }
 
-  Future<void> printPDF() async {
+  Future<void> printPDF(BuildContext context) async {
     PdfPrinter printer = PdfPrinter();
     if (_generatedPDFBytes != null) {
       //await Printing.layoutPdf(onLayout: (format) async => _generatedPDFBytes!);
-      await printer.printText(_generatedPDFBytes!);
+      await printer.printText(_generatedPDFBytes!, context);
     }
   }
 }

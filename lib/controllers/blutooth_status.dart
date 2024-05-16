@@ -3,32 +3,70 @@
 import 'dart:io';
 import 'package:barcodeinventory/utils/global_context_key.dart';
 import 'package:barcodeinventory/widgets/app_snakbar.dart';
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
+import 'package:pdf_image_renderer/pdf_image_renderer.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PdfPrinter {
   BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
-  Future<void> printText(Uint8List generatedPDFBytes) async {
+  Future<void> printText(
+      Uint8List generatedPDFBytes, BuildContext context) async {
     try {
-      final pdf = pw.Document();
-      pdf.addPage(pw.Page(
-        build: (pw.Context context) {
-          return pw.Image(pw.MemoryImage(generatedPDFBytes));
-        },
-      ));
+      // final pdf = pw.Document();
+      // pdf.addPage(pw.Page(
+      //   build: (pw.Context context) {
+      //     return pw.Image(pw.MemoryImage(generatedPDFBytes));
+      //   },
+      // ));
       final output = await getTemporaryDirectory();
       final file = File('${output.path}/example.pdf');
-      await file.writeAsBytes(await pdf.save());
+      await file.writeAsBytes(generatedPDFBytes);
 
-      List<int> bytes = await file.readAsBytes();
-      String base64 = base64Encode(bytes);
+      // Initialize the renderer
+      final pdf = PdfImageRendererPdf(path: file.path);
 
-      await bluetooth.printCustom(base64, 0, 0);
+      // open the pdf document
+      await pdf.open();
+
+      // open a page from the pdf document using the page index
+      await pdf.openPage(pageIndex: 0);
+
+      // get the render size after the page is loaded
+      final size = await pdf.getPageSize(pageIndex: 0);
+
+      // get the actual image of the page
+      final img = await pdf.renderPage(
+        pageIndex: 0,
+        x: 0,
+        y: 0,
+        width: size.width, // you can pass a custom size here to crop the image
+        height:
+            size.height, // you can pass a custom size here to crop the image
+        scale: 1, // increase the scale for better quality (e.g. for zooming)
+        background: Colors.white,
+      );
+
+      if (img == null) throw ();
+      // close the page again
+      await pdf.closePage(pageIndex: 0);
+
+      // close the PDF after rendering the page
+      await pdf.close();
+
+      final imgFile = File('${output.path}/example.jpg');
+      await imgFile.writeAsBytes(img);
+
+      final imageProvider = Image.file(imgFile);
+      await showImageViewer(context, imageProvider.image,
+          onViewerDismissed: () {});
+
+      await bluetooth.printImage(imgFile.path);
     } catch (e) {
       debugPrint('Error printing PDF: $e');
       snaki(msg: "Device Not Connected");
@@ -63,6 +101,8 @@ class PdfPrinter {
             },
           );
           if (connectedDevice != null) {
+            await bluetooth.connect(connectedDevice);
+
             debugPrint(
                 'Bluetooth connected successfully to ${connectedDevice.name}');
           } else {

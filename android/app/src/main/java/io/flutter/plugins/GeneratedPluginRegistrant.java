@@ -26,11 +26,6 @@ public final class GeneratedPluginRegistrant {
       Log.e(TAG, "Error registering plugin blue_thermal_printer, id.kakzaki.blue_thermal_printer.BlueThermalPrinterPlugin", e);
     }
     try {
-      flutterEngine.getPlugins().add(new com.example.bluetooth_print.BluetoothPrintPlugin());
-    } catch (Exception e) {
-      Log.e(TAG, "Error registering plugin bluetooth_print, com.example.bluetooth_print.BluetoothPrintPlugin", e);
-    }
-    try {
       flutterEngine.getPlugins().add(new io.endigo.plugins.pdfviewflutter.PDFViewFlutterPlugin());
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin flutter_pdfview, io.endigo.plugins.pdfviewflutter.PDFViewFlutterPlugin", e);
@@ -49,6 +44,11 @@ public final class GeneratedPluginRegistrant {
       flutterEngine.getPlugins().add(new io.flutter.plugins.pathprovider.PathProviderPlugin());
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin path_provider_android, io.flutter.plugins.pathprovider.PathProviderPlugin", e);
+    }
+    try {
+      flutterEngine.getPlugins().add(new io.cloudacy.pdf_image_renderer.PdfImageRendererPlugin());
+    } catch (Exception e) {
+      Log.e(TAG, "Error registering plugin pdf_image_renderer, io.cloudacy.pdf_image_renderer.PdfImageRendererPlugin", e);
     }
     try {
       flutterEngine.getPlugins().add(new com.baseflow.permissionhandler.PermissionHandlerPlugin());
