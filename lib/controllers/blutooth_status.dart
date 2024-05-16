@@ -66,7 +66,8 @@ class PdfPrinter {
       await showImageViewer(context, imageProvider.image,
           onViewerDismissed: () {});
 
-      await bluetooth.printImage(imgFile.path);
+      // await bluetooth.printImage(imgFile.path);
+      await bluetooth.printImageBytes(generatedPDFBytes);
     } catch (e) {
       debugPrint('Error printing PDF: $e');
       snaki(msg: "Device Not Connected");
