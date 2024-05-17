@@ -11,10 +11,12 @@ import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf_image_renderer/pdf_image_renderer.dart';
+import 'package:pdf_render/pdf_render.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PdfPrinter {
   BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
+
   Future<void> printText(
       Uint8List generatedPDFBytes, BuildContext context) async {
     try {
@@ -28,6 +30,17 @@ class PdfPrinter {
       final file = File('${output.path}/example.pdf');
       await file.writeAsBytes(generatedPDFBytes);
 
+      // final PdfDocument doc = await PdfDocument.openAsset(file.path);
+      // try {
+      //   final page = await doc.getPage(1);
+      //   final image = await page.render();
+      //   print(
+      //       '${image.width}x${image.height}: ${image.pixels.lengthInBytes} bytes.');
+      //   await bluetooth.printImageBytes(image.pixels);
+      // } finally {
+      //   doc.dispose();
+      // }
+
       // Initialize the renderer
       final pdf = PdfImageRendererPdf(path: file.path);
 
@@ -39,16 +52,18 @@ class PdfPrinter {
 
       // get the render size after the page is loaded
       final size = await pdf.getPageSize(pageIndex: 0);
-
-      // get the actual image of the page
+      //
+      // // get the actual image of the page
       final img = await pdf.renderPage(
         pageIndex: 0,
         x: 0,
         y: 0,
-        width: size.width, // you can pass a custom size here to crop the image
-        height:
-            size.height, // you can pass a custom size here to crop the image
-        scale: 1, // increase the scale for better quality (e.g. for zooming)
+        width: size.width,
+        // you can pass a custom size here to crop the image
+        height: size.height,
+        // you can pass a custom size here to crop the image
+        scale: 1,
+        // increase the scale for better quality (e.g. for zooming)
         background: Colors.white,
       );
 
@@ -60,14 +75,15 @@ class PdfPrinter {
       await pdf.close();
 
       final imgFile = File('${output.path}/example.jpg');
-      await imgFile.writeAsBytes(img);
-
+      // await imgFile.writeAsBytes(img);
+      imgFile.writeAsBytes(img.buffer
+          .asUint8List(img.offsetInBytes, img.lengthInBytes));
       final imageProvider = Image.file(imgFile);
       // await showImageViewer(context, imageProvider.image,
       //     onViewerDismissed: () {});
 
-      // await bluetooth.printImage(imgFile.path);
-      await bluetooth.printImageBytes(generatedPDFBytes);
+      await bluetooth.printImage(imgFile.path);
+      // await bluetooth.printImageBytes(imageProvider.);
     } catch (e) {
       debugPrint('Error printing PDF: $e');
       snaki(msg: 'PrintError: $e');
