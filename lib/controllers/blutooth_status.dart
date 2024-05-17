@@ -11,7 +11,6 @@ import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf_image_renderer/pdf_image_renderer.dart';
-import 'package:pdf_render/pdf_render.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PdfPrinter {
