@@ -1,9 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:typed_data';
+
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:barcodeinventory/models/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:provider/provider.dart';
+import 'package:screenshot/screenshot.dart';
 import '../controllers/barcode_controller.dart';
 import '../controllers/blutooth_status.dart';
 import '../utils/color_resources.dart';
@@ -20,6 +24,8 @@ class BarCodeGenerateScreen extends StatefulWidget {
 
 class _BarCodeGenerateScreenState extends State<BarCodeGenerateScreen> {
   PdfPrinter printer = PdfPrinter();
+  ScreenshotController screenshotController = ScreenshotController();
+
   @override
   void initState() {
     super.initState();
@@ -121,7 +127,12 @@ class _BarCodeGenerateScreenState extends State<BarCodeGenerateScreen> {
                 Expanded(
                   child: CustomButtonWidget(
                     buttonText: 'Print',
-                    onPressed: () => controller.printPDF(context),
+                    // onPressed: () => controller.printPDF(context),
+                    onPressed: () async {
+                      var image = await screenshotController.capture(pixelRatio: 1.5);
+                      List<int>? bytes = image?.toList();
+                      printer.printText(Uint8List.fromList(bytes!), context);
+                    },
                     buttonColor: ColorResources.colorPrint,
                   ),
                 ),
@@ -139,17 +150,31 @@ class _BarCodeGenerateScreenState extends State<BarCodeGenerateScreen> {
               ],
             ),
             const SizedBox(height: Dimensions.paddingSizeDefault),
-            if (controller.generatedPDFBytes != null)
-              Expanded(
-                child: PDFView(
-                  filePath: null,
-                  pdfData: controller.generatedPDFBytes,
-                  enableSwipe: true,
-                  swipeHorizontal: true,
-                  autoSpacing: false,
-                  pageFling: false,
+            Center(
+              child: Screenshot(
+                controller: screenshotController,
+                child: Center(
+                  child: Column(
+                    children: [
+                      const Text('Random Barcode'),
+                      BarcodeWidget(
+                        barcode: Barcode.code128(),
+                        data: 'Hello Flutter',
+                      ),
+                    ],
+                  ),
                 ),
               ),
+            ),
+            // if (controller.generatedPDFBytes != null)
+            //   Expanded(
+            //     child: Screenshot(
+            //       controller: screenshotController,
+            //       child: Center(
+            //         child: Text('Random Barcode'),
+            //       ),
+            //     ),
+            //   ),
           ],
         ),
       ),

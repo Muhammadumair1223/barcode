@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
-import 'dart:convert';
+
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf_image_renderer/pdf_image_renderer.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,60 +19,62 @@ class PdfPrinter {
   Future<void> printText(
       Uint8List generatedPDFBytes, BuildContext context) async {
     try {
-      // final pdf = pw.Document();
-      // pdf.addPage(pw.Page(
-      //   build: (pw.Context context) {
-      //     return pw.Image(pw.MemoryImage(generatedPDFBytes));
-      //   },
-      // ));
-      final output = await getTemporaryDirectory();
-      final file = File('${output.path}/example.pdf');
-      await file.writeAsBytes(generatedPDFBytes);
+      // // final pdf = pw.Document();
+      // // pdf.addPage(pw.Page(
+      // //   build: (pw.Context context) {
+      // //     return pw.Image(pw.MemoryImage(generatedPDFBytes));
+      // //   },
+      // // ));
+      // final output = await getTemporaryDirectory();
+      // final file = File('${output.path}/example.pdf');
+      // await file.writeAsBytes(generatedPDFBytes);
 
-      // Initialize the renderer
-      final pdf = PdfImageRendererPdf(path: file.path);
+      // // Initialize the renderer
+      // final pdf = PdfImageRendererPdf(path: file.path);
 
-      // open the pdf document
-      await pdf.open();
+      // // open the pdf document
+      // await pdf.open();
 
-      // open a page from the pdf document using the page index
-      await pdf.openPage(pageIndex: 0);
+      // // open a page from the pdf document using the page index
+      // await pdf.openPage(pageIndex: 0);
 
-      // get the render size after the page is loaded
-      final size = await pdf.getPageSize(pageIndex: 0);
-      //
-      // // get the actual image of the page
-      final img = await pdf.renderPage(
-        pageIndex: 0,
-        x: 0,
-        y: 0,
-        width: size.width,
-        // you can pass a custom size here to crop the image
-        height: size.height,
-        // you can pass a custom size here to crop the image
-        scale: 1,
-        // increase the scale for better quality (e.g. for zooming)
-        background: Colors.white,
-      );
+      // // get the render size after the page is loaded
+      // final size = await pdf.getPageSize(pageIndex: 0);
 
-      if (img == null) throw ();
-      // close the page again
-      await pdf.closePage(pageIndex: 0);
+      // //
+      // // // get the actual image of the page
+      // // Reduce the scale for smaller image size
+      // final img = await pdf.renderPage(
+      //   pageIndex: 0,
+      //   x: 0,
+      //   y: 0,
+      //   width: size.width,
+      //   // you can pass a custom size here to crop the image
+      //   height: size.height,
+      //   // you can pass a custom size here to crop the image
+      //   scale: 1,
+      //   // increase the scale for better quality (e.g. for zooming)
+      //   background: Colors.white,
+      // );
+      // if (img == null) throw ();
+      // // close the page again
+      // await pdf.closePage(pageIndex: 0);
 
-      // close the PDF after rendering the page
-      await pdf.close();
+      // // close the PDF after rendering the page
+      // await pdf.close();
 
-      final imgFile = File('${output.path}/example.jpg');
-      // await imgFile.writeAsBytes(img);
-      imgFile.writeAsBytes(
-          img.buffer.asUint8List(img.offsetInBytes, img.lengthInBytes));
-      final imageProvider = Image.file(imgFile);
-      // await showImageViewer(context, imageProvider.image,
-      //     onViewerDismissed: () {});
+      // final imgFile = File('${output.path}/example.jpg');
+      // // await imgFile.writeAsBytes(img);
+      // await imgFile.writeAsBytes(
+      //     img.buffer.asUint8List(img.offsetInBytes, img.lengthInBytes));
+      // final imageProvider = Image.file(imgFile);
+      // // await showImageViewer(context, imageProvider.image,
+      // //     onViewerDismissed: () {});
 
-      // final imgFile2 = await _getImageFromAsset('assets/image/barCodeLogo2.png');
+      // // final imgFile2 = await _getImageFromAsset('assets/image/barCodeLogo2.png');
 
-      await bluetooth.printImage(imgFile.path);
+      // await bluetooth.printImage(imgFile.path);
+      await bluetooth.printImageBytes(generatedPDFBytes);
     } catch (e) {
       debugPrint('Error printing PDF: $e');
       snaki(msg: 'PrintError: $e');
