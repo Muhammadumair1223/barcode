@@ -81,12 +81,21 @@ class PdfPrinter {
       // await showImageViewer(context, imageProvider.image,
       //     onViewerDismissed: () {});
 
-      await bluetooth.printImage(imgFile.path);
-      // await bluetooth.printImageBytes(imageProvider.);
+    final imgFile2 = await _getImageFromAsset('assets/image/barCodeLogo2.png');
+
+      // await bluetooth.printImage(imgFile2.);
+      await bluetooth.printImageBytes(imgFile2);
     } catch (e) {
       debugPrint('Error printing PDF: $e');
       snaki(msg: 'PrintError: $e');
     }
+  }
+
+  Future<Uint8List> _getImageFromAsset(String assetName) async {
+    final ByteData data = await rootBundle.load(assetName);
+    final Uint8List bytes = data.buffer.asUint8List();
+   // return pw.Image(pw.MemoryImage(bytes));
+    return bytes;
   }
 
   Future<void> initBluetooth() async {

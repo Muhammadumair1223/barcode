@@ -68,11 +68,11 @@ class BarcodeController extends BaseController {
                   ),
                   pw.SizedBox(height: 25),
                   pw.Row(children: [
-                    // pw.Container(
-                    //   width: 240,
-                    //   child: image,
-                    // ),
-                    // pw.SizedBox(width: 10),
+                    pw.Container(
+                      width: 240,
+                      child: image,
+                    ),
+                    pw.SizedBox(width: 10),
                     pw.Column(
                         mainAxisAlignment: pw.MainAxisAlignment.end,
                         children: [
@@ -83,24 +83,24 @@ class BarcodeController extends BaseController {
                             height: 60,
                             textStyle: pw.TextStyle(font: font),
                           ),
-                          // pw.SizedBox(height: 10),
-                          // pw.Container(
-                          //   width: 240,
-                          //   height: 80,
-                          //   decoration: pw.BoxDecoration(
-                          //       color: PdfColor.fromHex('FF0000'),
-                          //       borderRadius: const pw.BorderRadius.only(
-                          //           bottomRight: pw.Radius.circular(20))),
-                          //   child: pw.Center(
-                          //       child: pw.Text(
-                          //     "\$ $price",
-                          //     textAlign: pw.TextAlign.center,
-                          //     style: pw.TextStyle(
-                          //         font: font,
-                          //         fontSize: 38,
-                          //         fontWeight: pw.FontWeight.bold),
-                          //   )),
-                          // ),
+                          pw.SizedBox(height: 10),
+                          pw.Container(
+                            width: 240,
+                            height: 80,
+                            decoration: pw.BoxDecoration(
+                                color: PdfColor.fromHex('FF0000'),
+                                borderRadius: const pw.BorderRadius.only(
+                                    bottomRight: pw.Radius.circular(20))),
+                            child: pw.Center(
+                                child: pw.Text(
+                              "\$ $price",
+                              textAlign: pw.TextAlign.center,
+                              style: pw.TextStyle(
+                                  font: font,
+                                  fontSize: 38,
+                                  fontWeight: pw.FontWeight.bold),
+                            )),
+                          ),
                         ]),
                   ]),
                 ],
