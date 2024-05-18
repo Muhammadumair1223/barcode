@@ -129,9 +129,8 @@ class _BarCodeGenerateScreenState extends State<BarCodeGenerateScreen> {
                     buttonText: 'Print',
                     // onPressed: () => controller.printPDF(context),
                     onPressed: () async {
-                      var image = await screenshotController.capture(pixelRatio: 1.5);
-                      List<int>? bytes = image?.toList();
-                      printer.printText(Uint8List.fromList(bytes!), context);
+                      var image = await screenshotController.capture(pixelRatio: 1.3);
+                      printer.printText(image!, context);
                     },
                     buttonColor: ColorResources.colorPrint,
                   ),
@@ -153,10 +152,10 @@ class _BarCodeGenerateScreenState extends State<BarCodeGenerateScreen> {
             Center(
               child: Screenshot(
                 controller: screenshotController,
-                child: Center(
+                child: Container(
+                  width: 100,
                   child: Column(
                     children: [
-                      const Text('Random Barcode'),
                       BarcodeWidget(
                         barcode: Barcode.code128(),
                         data: 'Hello Flutter',
