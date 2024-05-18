@@ -29,17 +29,6 @@ class PdfPrinter {
       final file = File('${output.path}/example.pdf');
       await file.writeAsBytes(generatedPDFBytes);
 
-      // final PdfDocument doc = await PdfDocument.openAsset(file.path);
-      // try {
-      //   final page = await doc.getPage(1);
-      //   final image = await page.render();
-      //   print(
-      //       '${image.width}x${image.height}: ${image.pixels.lengthInBytes} bytes.');
-      //   await bluetooth.printImageBytes(image.pixels);
-      // } finally {
-      //   doc.dispose();
-      // }
-
       // Initialize the renderer
       final pdf = PdfImageRendererPdf(path: file.path);
 
@@ -75,16 +64,15 @@ class PdfPrinter {
 
       final imgFile = File('${output.path}/example.jpg');
       // await imgFile.writeAsBytes(img);
-      imgFile.writeAsBytes(img.buffer
-          .asUint8List(img.offsetInBytes, img.lengthInBytes));
+      imgFile.writeAsBytes(
+          img.buffer.asUint8List(img.offsetInBytes, img.lengthInBytes));
       final imageProvider = Image.file(imgFile);
       // await showImageViewer(context, imageProvider.image,
       //     onViewerDismissed: () {});
 
-    final imgFile2 = await _getImageFromAsset('assets/image/barCodeLogo2.png');
+      // final imgFile2 = await _getImageFromAsset('assets/image/barCodeLogo2.png');
 
-      // await bluetooth.printImage(imgFile2.);
-      await bluetooth.printImageBytes(imgFile2);
+      await bluetooth.printImage(imgFile.path);
     } catch (e) {
       debugPrint('Error printing PDF: $e');
       snaki(msg: 'PrintError: $e');
@@ -94,7 +82,7 @@ class PdfPrinter {
   Future<Uint8List> _getImageFromAsset(String assetName) async {
     final ByteData data = await rootBundle.load(assetName);
     final Uint8List bytes = data.buffer.asUint8List();
-   // return pw.Image(pw.MemoryImage(bytes));
+    // return pw.Image(pw.MemoryImage(bytes));
     return bytes;
   }
 
