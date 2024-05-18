@@ -16,8 +16,7 @@ import 'package:permission_handler/permission_handler.dart';
 class PdfPrinter {
   BlueThermalPrinter bluetooth = BlueThermalPrinter.instance;
 
-  Future<void> printText(
-      Uint8List generatedPDFBytes, BuildContext context) async {
+  Future<void> printText(String filepath, BuildContext context) async {
     try {
       // // final pdf = pw.Document();
       // // pdf.addPage(pw.Page(
@@ -74,7 +73,8 @@ class PdfPrinter {
       // // final imgFile2 = await _getImageFromAsset('assets/image/barCodeLogo2.png');
 
       // await bluetooth.printImage(imgFile.path);
-      await bluetooth.printImageBytes(generatedPDFBytes);
+
+      await bluetooth.printImage(filepath);
     } catch (e) {
       debugPrint('Error printing PDF: $e');
       snaki(msg: 'PrintError: $e');

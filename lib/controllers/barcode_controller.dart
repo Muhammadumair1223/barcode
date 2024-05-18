@@ -117,11 +117,11 @@ class BarcodeController extends BaseController {
     notifyListeners();
   }
 
-  Future<void> printPDF(BuildContext context) async {
-    PdfPrinter printer = PdfPrinter();
-    if (_generatedPDFBytes != null) {
-      //await Printing.layoutPdf(onLayout: (format) async => _generatedPDFBytes!);
-      await printer.printText(_generatedPDFBytes!, context);
-    }
-  }
+  // Future<void> printPDF(BuildContext context) async {
+  //   PdfPrinter printer = PdfPrinter();
+  //   if (_generatedPDFBytes != null) {
+  //     //await Printing.layoutPdf(onLayout: (format) async => _generatedPDFBytes!);
+  //     await printer.printText(_generatedPDFBytes!, context);
+  //   }
+  // }
 }

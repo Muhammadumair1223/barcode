@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:typed_data';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:barcodeinventory/models/product.dart';
@@ -129,8 +130,19 @@ class _BarCodeGenerateScreenState extends State<BarCodeGenerateScreen> {
                     buttonText: 'Print',
                     // onPressed: () => controller.printPDF(context),
                     onPressed: () async {
-                      var image = await screenshotController.capture(pixelRatio: 1.3);
-                      printer.printText(image!, context);
+                      final directory =
+                          await getApplicationDocumentsDirectory();
+                      final String path = directory.path;
+                      String fileName =
+                          DateTime.now().microsecondsSinceEpoch.toString();
+                      // var image =
+                      //     await screenshotController.capture(pixelRatio: 1.3);
+                      await screenshotController.captureAndSave(
+                        '$path/$fileName.jpg', // Set the path where the screenshot will be saved
+                        pixelRatio: 1.3,
+                        delay: Duration(seconds: 1),
+                      );
+                      printer.printText('$path/$fileName.jpg', context);
                     },
                     buttonColor: ColorResources.colorPrint,
                   ),
